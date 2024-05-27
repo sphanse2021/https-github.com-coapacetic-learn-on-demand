@@ -3,7 +3,7 @@ version: 2
 sources:
     - name: stripe
       description: Raw data from Stripe app.
-      database: raw
+      database: hive_metastore
       tables:
         - name: payment
           description: Raw payment data from Stripe app.
