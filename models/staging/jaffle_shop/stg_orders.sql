@@ -17,9 +17,7 @@ staged as (
         case 
             when status like '%shipped%' then 'shipped'
             when status like '%return%' then 'returned'
-            when status like '%pending%' or '%placed%' then 'placed'
-            when status like '%cancelled%' then 'cancelled'
-            when status like '%completed%' then 'completed'
+            when status like '%pending%' then 'placed'
             else status
         end as status
     from source
@@ -28,4 +26,4 @@ staged as (
 
 select * from staged
 
-{{ limit_data_in_dev('order_date', '3000') }}
+-- {{ limit_data_in_dev('order_date', '5000') }}
