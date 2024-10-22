@@ -26,3 +26,5 @@ staged as (
 )
 
 select * from staged
+
+{{ limit_data_in_dev('order_date', '3000') }}
