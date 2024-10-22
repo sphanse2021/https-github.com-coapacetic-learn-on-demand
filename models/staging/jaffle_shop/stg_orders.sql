@@ -26,4 +26,4 @@ staged as (
 
 select * from staged
 
--- {{ limit_data_in_dev('order_date', '5000') }}
+{# {{ limit_data_in_dev('order_date', '5000') }} #}

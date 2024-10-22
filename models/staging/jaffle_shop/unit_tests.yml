@@ -21,7 +21,7 @@ unit_tests:
         - {order_id: 5, status: shipped}
         - {order_id: 6, status: placed}
         - {order_id: 7, status: shipped}
-
+        
   - name: test_days_since_ordered
     description: Test my datediff caluclation for days_since_ordered
     model: stg_orders
