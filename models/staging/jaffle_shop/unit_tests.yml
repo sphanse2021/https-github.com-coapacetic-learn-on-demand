@@ -8,20 +8,20 @@ unit_tests:
          - {id: 1, status: returned}
          - {id: 2, status: return_pending}
          - {id: 3, status: completed}
-         - {id: 4, status: shipped}
-         - {id: 5, status: pending}
-         - {id: 6, status: cancelled}
-         - {id: 7, status: placed}
+         - {id: 4, status: pending}
+         - {id: 5, status: shipped}
+         - {id: 6, status: placed}
+         - {id: 7, status: shipped_pending}
     expect: # the expected output given the inputs above
       rows:
         - {order_id: 1, status: returned}
         - {order_id: 2, status: returned}
         - {order_id: 3, status: completed}
-        - {order_id: 4, status: shipped}
-        - {order_id: 5, status: placed}
-        - {order_id: 6, status: cancelled}
-        - {order_id: 7, status: placed}
-
+        - {order_id: 4, status: placed}
+        - {order_id: 5, status: shipped}
+        - {order_id: 6, status: placed}
+        - {order_id: 7, status: shipped}
+        
   - name: test_days_since_ordered
     description: Test my datediff caluclation for days_since_ordered
     model: stg_orders
