@@ -6,6 +6,10 @@ name: 'jaffle_shop'
 version: '1.0.0'
 config-version: 2
 
+# cloud cli configuration
+dbt-cloud:
+    project-id: 70403103974747
+
 # This setting configures which "profile" dbt uses for this project.
 profile: 'default'
 
