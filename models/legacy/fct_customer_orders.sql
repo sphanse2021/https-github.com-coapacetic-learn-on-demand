@@ -1,3 +1,27 @@
+with
+
+customers as (
+
+  select * from {{ source('jaffle_shop', 'customers') }}
+
+),
+
+orders as (
+
+  select * from {{ source('jaffle_shop', 'orders') }}
+
+),
+
+payments as (
+
+  select * from {{ source('stripe', 'payment') }}
+
+),
+
+ paid_orders as (select Orders.ID as order_id,
+        Orders.USER_ID    as customer_id,
+        Orders.ORDER_DATE AS order_placed_at,
+            Orders.STATUS AS order_status,
 with p as (
     select
         orderid as order_id,
@@ -15,25 +39,24 @@ paid_orders as (
         orders.status as order_status,
         p.total_amount_paid,
         p.payment_finalized_date,
-        c.first_name as customer_first_name,
-        c.last_name as customer_last_name
-    from raw.jaffle_shop.orders as orders
-    left join
-        p
-        on orders.id = p.order_id
-    left join raw.jaffle_shop.customers as c on orders.user_id = c.id
-),
+        C.FIRST_NAME    as customer_first_name,
+            C.LAST_NAME as customer_last_name
+    from orders
+    left join (select ORDERID as order_id, max(CREATED) as payment_finalized_date, sum(AMOUNT) / 100.0 as total_amount_paid
+from {{ source('stripe', 'payment') }}
+where STATUS <> 'fail'
+group by 1) p ON orders.ID = p.order_id
+left join {{ source('jaffle_shop', 'customers') }} C on orders.USER_ID = C.ID ),
 
-customer_orders as (
-    select
-        c.id as customer_id,
-        min(order_date) as first_order_date,
-        max(order_date) as most_recent_order_date,
-        count(orders.id) as number_of_orders
-    from raw.jaffle_shop.customers as c
-    left join raw.jaffle_shop.orders as orders on c.id = orders.user_id
-    group by 1
-)
+customer_orders 
+    as (select C.ID as customer_id
+        , min(ORDER_DATE) as first_order_date
+        , max(ORDER_DATE) as most_recent_order_date
+        , count(ORDERS.ID) AS number_of_orders
+    from {{ source('jaffle_shop', 'customers') }} C 
+    left join {{ source('jaffle_shop', 'orders') }} as Orders
+    on orders.USER_ID = C.ID 
+    group by 1)
 
 select
     p.*,
